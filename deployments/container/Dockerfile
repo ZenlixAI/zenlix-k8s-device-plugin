@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.26.2 AS base
+FROM truth-ai-registry.cn-hangzhou.cr.aliyuncs.com/base/golang:1.26-trixie AS base
+
 
 # The devel image is used for local development.
 FROM base AS devel
@@ -20,7 +21,7 @@ FROM base AS devel
 WORKDIR /work
 COPY * .
 
-ARG GOPROXY="https://proxy.golang.org,direct"
+ARG GOPROXY="https://goproxy.cn,https://goproxy.io,direct"
 ENV GOPROXY=$GOPROXY
 
 RUN make install-tools
@@ -40,7 +41,7 @@ ARG VERSION="N/A"
 ARG GIT_COMMIT="unknown"
 RUN make PREFIX=/artifacts cmds
 
-FROM nvcr.io/nvidia/distroless/go:v4.0.3-dev AS application
+FROM truth-ai-registry.cn-hangzhou.cr.aliyuncs.com/base/distroless/go:v4.0.3-dev AS application
 
 USER 0:0
 SHELL ["/busybox/sh", "-c"]
